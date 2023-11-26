@@ -1,5 +1,8 @@
 import { CommonModule } from '@angular/common';
 import { FlexLayoutModule } from '@angular/flex-layout';
+import { MatButtonModule } from '@angular/material/button';
+import { MatIconModule } from '@angular/material/icon';
+import { MatMenuModule } from '@angular/material/menu';
 import { MatRippleModule } from '@angular/material/core';
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { NgModule } from '@angular/core';
@@ -11,6 +14,9 @@ import { HomeRoutingModule } from './home-routing.module';
   declarations: [HomeComponent],
   imports: [
     CommonModule,
+    MatButtonModule,
+    MatIconModule,
+    MatMenuModule,
     FlexLayoutModule,
     MatToolbarModule,
     MatRippleModule,

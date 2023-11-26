@@ -1,7 +1,15 @@
 <div fxLayout="column" fxFlexFill>
   <div fxFlex="none">
     <mat-toolbar color="primary">
-      <span>MYAPP</span>
+      <button mat-button routerLink="/home">MYAPP</button>
+      <span style="margin: 0 32px"></span>
+      <div fxLayout="row" fxLayoutAlign="start center" fxLayoutGap="8px">
+        <ng-container *ngFor="let item of menu">
+          <button mat-button [routerLink]="'/home/' + item">
+            {{ item | uppercase }}
+          </button>
+        </ng-container>
+      </div>
     </mat-toolbar>
   </div>
   <div fxFlex>
