@@ -1,0 +1,65 @@
+version: '3.9'
+services:
+  traefik:
+    image: "traefik:v3.0"
+    command:
+      #  - "--log.level=DEBUG"
+      - "--api.insecure=true"
+      - "--providers.docker=true"
+      - "--providers.docker.exposedbydefault=false"
+      - "--entrypoints.web.address=:80"
+      - "--entrypoints.websecure.address=:443"
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - mfe-network
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  app1:
+    image: kprasad99/app1:1.0.0-alpha.1
+    build:
+      context: ./app1
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+    # no env to enable h2c, need to manually add nginx.conf with h2c enabled.
+    #  - "traefik.http.services.app1.loadbalancer.server.scheme=h2c"
+      - "traefik.http.services.app1.loadbalancer.server.port=80"
+      - "traefik.http.routers.app1.rule=PathPrefix(`/app1`)"
+    environment:
+      NGINX_ENTRYPOINT_QUIET_LOGS: "1"
+    networks:
+      - mfe-network
+  app2:
+    image: kprasad99/app2:1.0.0-alpha.1
+    build:
+      context: ./app2
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+    # no env to enable h2c, need to manually add nginx.conf with h2c enabled.
+    #  - "traefik.http.services.app2.loadbalancer.server.scheme=h2c"
+      - "traefik.http.services.app2.loadbalancer.server.port=80"
+      - "traefik.http.routers.app2.rule=PathPrefix(`/app2`)"
+    environment:
+      NGINX_ENTRYPOINT_QUIET_LOGS: "1"
+    networks:
+      - mfe-network
+  myapp:
+    image: kprasad99/myapp:1.0.0-alpha.1
+    build:
+      context: ./myapp
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+    # no env to enable h2c, need to manually add nginx.conf with h2c enabled.
+    #  - "traefik.http.services.myapp.loadbalancer.server.scheme=h2c"
+      - "traefik.http.services.myapp.loadbalancer.server.port=80"
+      - "traefik.http.routers.myapp.rule=PathPrefix(`/myapp`)"
+    environment:
+      NGINX_ENTRYPOINT_QUIET_LOGS: "1"
+    networks:
+      - mfe-network
+networks:
+  mfe-network:

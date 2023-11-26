@@ -1,0 +1,24 @@
+FROM node:18-alpine AS builder
+
+WORKDIR /workspace
+
+RUN npm install -g pnpm
+
+#COPY . /workspace
+COPY .eslintrc.json /workspace/.eslintrc.json
+COPY ngsw-config.json /workspace/ngsw-config.json
+COPY tsconfig.app.json /workspace/tsconfig.app.json
+COPY tsconfig.json /workspace/tsconfig.json
+COPY tsconfig.spec.json /workspace/tsconfig.spec.json
+COPY package.json /workspace/package.json
+COPY angular.json /workspace/angular.json
+COPY webpack.config.js /workspace/webpack.config.js
+COPY webpack.prod.config.js /workspace/webpack.prod.config.js
+COPY src /workspace/src
+
+RUN pnpm install \
+  && ./node_modules/.bin/ng build --base-href="/app2/" --deploy-url="/app2/" --configuration production --output-path /output
+
+FROM nginx:alpine
+
+COPY --from=builder ./output/. /usr/share/nginx/html/app2

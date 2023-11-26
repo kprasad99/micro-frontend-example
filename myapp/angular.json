@@ -53,7 +53,8 @@
 								}
 							],
 							"outputHashing": "all",
-							"serviceWorker": "ngsw-config.json",
+              "serviceWorker": true,
+              "ngswConfigPath": "ngsw-config.json",
 							"extraWebpackConfig": "webpack.prod.config.js"
 						},
 						"development": {
@@ -129,6 +130,7 @@
 		}
 	},
 	"cli": {
+    "packageManager": "pnpm",
 		"schematicCollections": [
 			"@angular-eslint/schematics"
 		]
