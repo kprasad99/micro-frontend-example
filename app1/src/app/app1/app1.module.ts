@@ -6,6 +6,7 @@ import { App1Component } from './app1.component';
 import { App1RoutingModule } from './app1-routing.module';
 
 @NgModule({
+  exports: [App1Component],
   declarations: [App1Component],
   imports: [CommonModule, FlexLayoutModule, App1RoutingModule]
 })

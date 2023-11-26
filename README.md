@@ -208,6 +208,7 @@ import { App1Component } from './app1.component';
 import { App1RoutingModule } from './app1-routing.module';
 
 @NgModule({
+  exports: [App1Component],
   declarations: [App1Component],
   imports: [CommonModule, FlexLayoutModule, App1RoutingModule]
 })
@@ -288,6 +289,7 @@ import { App2Component } from './app2.component';
 import { App2RoutingModule } from './app2-routing.module';
 
 @NgModule({
+  exports: [App2Component],
   declarations: [App2Component],
   imports: [CommonModule, FlexLayoutModule, App2RoutingModule]
 })
@@ -303,3 +305,127 @@ ng serve --port 4201
 // app2
 ng serve --port 4202
 ```
+## Enable federation.
+
+. Enable remote app for `app1`.
+```
+ng add @angular-architects/module-federation --type remote
+```
+. Update `webpack.config.js` to expose App1Module and shared libraries.
+```
+const { shareAll, share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+
+module.exports = withModuleFederationPlugin({
+  name: 'app1',
+
+  exposes: {
+    './App1Module': './src/app/app1/app1.module.ts'
+  },
+
+  // shared: {
+  //   ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  // },
+  shared: share({
+    '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/material': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: true },
+  })
+});
+
+
+```
+. Enable remote app for `app2`.
+```
+ng add @angular-architects/module-federation --type remote
+```
+. Update `webpack.config.js` to expose App2Module and shared libraries.
+```
+const { shareAll, share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+
+module.exports = withModuleFederationPlugin({
+  name: 'app2',
+
+  exposes: {
+    './App2Module': './src/app/app2/app2.module.ts'
+  },
+
+  // shared: {
+  //   ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  // },
+  shared: share({
+    '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/material': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: true },
+  })
+});
+
+```
+
+. Consume the remote app in `myapp` using dynamic loading.
+```
+$ ng add @angular-architects/module-federation --type dynamic-host
+```
+. Update `webpack.config.js` to expose App2Module and shared libraries.
+```
+const { shareAll, share, withModuleFederationPlugin } = require('@angular-architects/module-federation/webpack');
+
+module.exports = withModuleFederationPlugin({
+
+  // shared: {
+  //   ...shareAll({ singleton: true, strictVersion: true, requiredVersion: 'auto' }),
+  // },
+  shared: share({
+    '@angular/core': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/common/http': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/router': { singleton: true, strictVersion: true, requiredVersion: 'auto' },
+    '@angular/material': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: true },
+  })
+});
+
+```
+. Update `home-routing.module.ts` to use `app1` and `app2 modules`.
+```
+const routes: Routes = [
+  {
+    path: '',
+    component: HomeComponent,
+    children: [
+      {
+        path: 'app1',
+        loadChildren: () =>
+          loadRemoteModule({
+            type: 'manifest',
+            remoteName: 'app1',
+            exposedModule: './App1Module',
+          }).then((m) => m.App1Module),
+      },
+      {
+        path: 'app2',
+        loadChildren: () =>
+          loadRemoteModule({
+            type: 'manifest',
+            remoteName: 'app2',
+            exposedModule: './App2Module',
+          }).then((m) => m.App2Module),
+      },
+    ],
+  },
+];
+```
+. Update `mf.manifest.json` to point to the remote apps.
+```json
+{
+	"app1": "http://localhost:4201/remoteEntry.js",
+  "app2": "http://localhost:4202/remoteEntry.js"
+}
+```
+
+
+
+Referances:
+- https://www.angulararchitects.io/en/blog/whats-new-in-angular-architects-module-federation-14-3/
