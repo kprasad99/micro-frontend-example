@@ -16,6 +16,25 @@ services:
       - mfe-network
     volumes:
       - "/var/run/docker.sock:/var/run/docker.sock:ro"
+  registery:
+    image: kprasad99/service-discoery:1.0.0-alpha.1
+    privileged: true
+    user: "0"
+    build:
+      context: ./service-discovery
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+    # no env to enable h2c, h2c is not supported by fasthttp.
+    #  - "traefik.http.services.registery.loadbalancer.server.scheme=h2c"
+      - "traefik.http.services.registery.loadbalancer.server.port=8080"
+      - "traefik.http.routers.registery.rule=PathPrefix(`/registery`)"
+    environment:
+      WEB_CONTEXT_PATH: "/registery"
+    networks:
+      - mfe-network
+    volumes:
+      - "/var/run/docker.sock:/var/run/docker.sock:z"
   app1:
     image: kprasad99/app1:1.0.0-alpha.1
     build:
@@ -27,6 +46,8 @@ services:
     #  - "traefik.http.services.app1.loadbalancer.server.scheme=h2c"
       - "traefik.http.services.app1.loadbalancer.server.port=80"
       - "traefik.http.routers.app1.rule=PathPrefix(`/app1`)"
+      - "io.github.kprasad99.frontend.name=app1"
+      - "io.github.kprasad99.frontend.path=/app1/remoteEntry.js"
     environment:
       NGINX_ENTRYPOINT_QUIET_LOGS: "1"
     networks:
@@ -42,6 +63,8 @@ services:
     #  - "traefik.http.services.app2.loadbalancer.server.scheme=h2c"
       - "traefik.http.services.app2.loadbalancer.server.port=80"
       - "traefik.http.routers.app2.rule=PathPrefix(`/app2`)"
+      - "io.github.kprasad99.frontend.name=app2"
+      - "io.github.kprasad99.frontend.path=/app2/remoteEntry.js"
     environment:
       NGINX_ENTRYPOINT_QUIET_LOGS: "1"
     networks:

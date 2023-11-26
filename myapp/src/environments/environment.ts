@@ -1,3 +1,3 @@
 export const environment = {
-  MODULE_FEDERATION_URL: './assets/mf.manifest.json',
+  MODULE_FEDERATION_URL: '/registery/service',
 };

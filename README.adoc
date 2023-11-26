@@ -2,6 +2,23 @@
 
 :source-highlighter: coderay
 
+== Possible Deployment mode in K8S.
+
+image::images/micro_frontend.png[Micro Frontend Diagram]
+
+== How to run
+
+- clone the project.
+- Bring up application.
++
+----
+docker compose up -d
+----
+NOTE: Dynamic loading works only with docker daemon as service discovery is written for docker runtime.
+
+- Alternatively you can run `pnpm install` and start application using `ng serve`, `ng serve --port 4201` and `ng serve --port 4202` for myapp, app1 and app2 respectively.
+- Browse to `http://localhost/myapp`, on menu bar click on `app1` and `app2`, dynamically load `app1` and `app2` modules.
+
 == Step by step, How to enable Angular Module Federation.
 
 === Initialize
