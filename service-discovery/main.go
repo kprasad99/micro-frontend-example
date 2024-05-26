@@ -6,7 +6,7 @@ import (
 	"os"
 	"strings"
 
-	"github.com/docker/docker/api/types"
+	"github.com/docker/docker/api/types/container"
 	"github.com/docker/docker/client"
 	"github.com/gofiber/fiber/v2"
 )
@@ -44,7 +44,7 @@ func main() {
 
 	group := ""
 
-	containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
+	containers, err := cli.ContainerList(context.Background(), container.ListOptions{All: true})
 	if err != nil {
 		panic(err)
 	}
@@ -67,7 +67,7 @@ func main() {
 	app.Get("/liveness", okHandler)
 	app.Get("/readiness", okHandler)
 	app.Get(contextPath+"/service", func(c *fiber.Ctx) error {
-		containers, err := cli.ContainerList(context.Background(), types.ContainerListOptions{})
+		containers, err := cli.ContainerList(context.Background(), container.ListOptions{All: true})
 		if err != nil {
 			return err
 		}
