@@ -3,7 +3,7 @@ import { NgModule } from '@angular/core';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 
 import { HomeComponent } from './home.component';
-import { HttpClient } from '@angular/common/http';
+import { RemoteModuleInfoService } from '../remote-module-info.service';
 
 // const routes: Routes = [
 //   {
@@ -38,38 +38,26 @@ import { HttpClient } from '@angular/common/http';
   providers: [
     {
       provide: ROUTES,
-      useFactory: (http: HttpClient) => {
+      useFactory: (remoteInitService: RemoteModuleInfoService) => {
         const routes: Routes = [];
         const homePath: Route = {
           path: '',
           component: HomeComponent,
         };
-        // use APP_INITIALIZER to get data from http endpoint/service discovery
-        const apps = [
-          { name: 'app1', module: 'App1Module' },
-          { name: 'app2', module: 'App2Module' },
-        ];
-        for (const app of apps) {
+        for (const key in remoteInitService.remoteModuleInfo) {
+          const app = remoteInitService.remoteModuleInfo[key];
           if (homePath.children) {
             homePath.children.push({
-              path: app.name,
+              path: app.path,
               loadChildren: () =>
-                loadRemoteModule({
-                  type: 'manifest',
-                  remoteName: app.name,
-                  exposedModule: `./${app.module}`,
-                }).then((m) => m[app.module]),
+                loadRemoteModule(app).then((m) => m[app.moduleName]),
             });
           } else {
             homePath.children = [
               {
-                path: app.name,
+                path: app.path,
                 loadChildren: () =>
-                  loadRemoteModule({
-                    type: 'manifest',
-                    remoteName: app.name,
-                    exposedModule: `./${app.module}`,
-                  }).then((m) => m[app.module]),
+                  loadRemoteModule(app).then((m) => m[app.moduleName]),
               },
             ];
           }
@@ -80,6 +68,7 @@ import { HttpClient } from '@angular/common/http';
           // ..additionalRoutes
         ];
       },
+      deps: [RemoteModuleInfoService],
       multi: true,
     },
   ],

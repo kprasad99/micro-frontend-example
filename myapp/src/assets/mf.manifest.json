@@ -1,4 +1,18 @@
 {
-	"app1": "http://localhost:4201/remoteEntry.js",
-  "app2": "http://localhost:4202/remoteEntry.js"
+  "app1": {
+    "name": "app1",
+    "path": "app1",
+    "moduleName": "App1Module",
+    "remoteEntry": "http://localhost:4201/app1/remoteEntry.js",
+    "remoteName": "app1",
+    "exposedModule": "/app1/App1Module"
+  },
+  "app2": {
+    "name": "app2",
+    "path": "app2",
+    "moduleName": "App2Module",
+    "remoteEntry": "http://localhost:4202/app2/remoteEntry.js",
+    "remoteName": "app2",
+    "exposedModule": "/app2/App2Module"
+  }
 }

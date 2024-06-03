@@ -6,3 +6,5 @@ initFederation(environment.MODULE_FEDERATION_URL)
   .catch((err) => console.error(err))
   .then((_) => import('./bootstrap'))
   .catch((err) => console.error(err));
+
+//import('./bootstrap').catch((err) => console.error(err));

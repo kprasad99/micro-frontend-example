@@ -11,6 +11,15 @@ import (
 	"github.com/gofiber/fiber/v2"
 )
 
+type ServiceInfo struct {
+	Name          string `json:"name"`
+	Path          string `json:"path"`
+	ModuleName    string `json:"moduleName"`
+	RemoteEntry   string `json:"remoteEntry"`
+	RemoteName    string `json:"remoteName"`
+	ExposedModule string `json:"exposedModule"`
+}
+
 func okHandler(ctx *fiber.Ctx) error {
 	return ctx.SendString("OK")
 }
@@ -72,11 +81,11 @@ func main() {
 			return err
 		}
 
-		services := map[string]string{}
+		services := map[string]ServiceInfo{}
 
 		for _, container := range containers {
 			key := ""
-			value := ""
+			svc := ServiceInfo{}
 			hasGroup := false
 			for k, v := range container.Labels {
 				if k == "com.docker.compose.project" && v == group {
@@ -84,13 +93,26 @@ func main() {
 				}
 				if k == "io.github.kprasad99.frontend.name" {
 					key = v
+					svc.Name = v
 				}
 				if k == "io.github.kprasad99.frontend.path" {
-					value = v
+					svc.Path = v
+				}
+				if k == "io.github.kprasad99.frontend.moduleName" {
+					svc.ModuleName = v
+				}
+				if k == "io.github.kprasad99.frontend.remoteEntry" {
+					svc.RemoteEntry = v
+				}
+				if k == "io.github.kprasad99.frontend.remoteName" {
+					svc.RemoteName = v
+				}
+				if k == "io.github.kprasad99.frontend.exposedModule" {
+					svc.ExposedModule = v
 				}
 			}
-			if key != "" && value != "" && (ignoreGroup || hasGroup) {
-				services[key] = value
+			if key != "" && (ignoreGroup || hasGroup) {
+				services[key] = svc
 			}
 		}
 		return c.JSON(services)
