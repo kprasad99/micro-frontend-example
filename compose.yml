@@ -76,6 +76,27 @@ services:
       NGINX_ENTRYPOINT_QUIET_LOGS: "1"
     networks:
       - mfe-network
+  app3:
+    image: kprasad99/app3:1.0.0-alpha.1
+    build:
+      context: ./app3
+      dockerfile: Dockerfile
+    labels:
+      - "traefik.enable=true"
+    # no env to enable h2c, need to manually add nginx.conf with h2c enabled.
+    #  - "traefik.http.services.app2.loadbalancer.server.scheme=h2c"
+      - "traefik.http.services.app3.loadbalancer.server.port=80"
+      - "traefik.http.routers.app3.rule=PathPrefix(`/app3`)"
+      # - "io.github.kprasad99.frontend.name=app3"
+      # - "io.github.kprasad99.frontend.path=app3"
+      # - "io.github.kprasad99.frontend.moduleName=App2Module"
+      # - "io.github.kprasad99.frontend.remoteEntry=/app2/remoteEntry.js"
+      # - "io.github.kprasad99.frontend.remoteName=app2"
+      # - "io.github.kprasad99.frontend.exposedModule=/app2/App2Module"
+    environment:
+      NGINX_ENTRYPOINT_QUIET_LOGS: "1"
+    networks:
+      - mfe-network
   myapp:
     image: kprasad99/myapp:1.0.0-alpha.1
     build:
