@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter, Route, Routes, useRoutes } from 'react-router-dom';
+import { BrowserRouter, HashRouter, Route, Routes, useRoutes } from 'react-router-dom';
 import { createRoot } from 'react-dom/client';
 import routes from './routes';
 
@@ -11,18 +11,12 @@ export default function App() {
   // const content = useRoutes(routes);
   // return content;
   return (
-    <Routes>
+    <HashRouter>
+        <Routes>
         <Route path='/' element={<Home />}>
           <Route index element={<App3 />} />
         </Route>
-    </Routes>
+        </Routes>
+    </HashRouter>
   );
 };
-
-const container = document.getElementById("app");
-const root = createRoot(container!);
-root.render(<React.StrictMode>
-  <BrowserRouter>
-      <App />
-  </BrowserRouter>
-</React.StrictMode>);

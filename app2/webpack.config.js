@@ -21,4 +21,3 @@ module.exports = withModuleFederationPlugin({
 
 module.exports.output.scriptType = 'text/javascript';
 module.exports.output.publicPath = '/app2/';
-
