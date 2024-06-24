@@ -1,5 +1,7 @@
 = Example Project to Demo Microfront end.
 
+Contains both angular and react remote applications, app1, app2 are angular and app3 is react application.
+
 :source-highlighter: coderay
 
 == Possible Deployment mode in K8S.
@@ -549,3 +551,5 @@ ng serve --port 4202
 Referances:
 
 - https://www.angulararchitects.io/en/blog/whats-new-in-angular-architects-module-federation-14-3/
+- https://justangular.com/blog/bind-route-info-to-component-inputs-new-router-feature
+- https://www.linkedin.com/pulse/angular-host-react-microfrontends-rany-elhousieny-phd%25E1%25B4%25AC%25E1%25B4%25AE%25E1%25B4%25B0-fde7c

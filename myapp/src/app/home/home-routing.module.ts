@@ -3,6 +3,7 @@ import { NgModule } from '@angular/core';
 import { loadRemoteModule } from '@angular-architects/module-federation';
 
 import { HomeComponent } from './home.component';
+import { ReactWrapperComponent } from '../react-wrapper/react-wrapper.component';
 import { RemoteModuleInfoService } from '../remote-module-info.service';
 
 // const routes: Routes = [
@@ -47,19 +48,37 @@ import { RemoteModuleInfoService } from '../remote-module-info.service';
         for (const key in remoteInitService.remoteModuleInfo) {
           const app = remoteInitService.remoteModuleInfo[key];
           if (homePath.children) {
-            homePath.children.push({
-              path: app.path,
-              loadChildren: () =>
-                loadRemoteModule(app).then((m) => m[app.moduleName]),
-            });
-          } else {
-            homePath.children = [
-              {
+            if (app.appType === 'angular') {
+              homePath.children.push({
                 path: app.path,
                 loadChildren: () =>
                   loadRemoteModule(app).then((m) => m[app.moduleName]),
-              },
-            ];
+              });
+            } else {
+              homePath.children.push({
+                path: app.path,
+                component: ReactWrapperComponent,
+                data: { appInfo: app },
+              });
+            }
+          } else {
+            if (app.appType === 'angular') {
+              homePath.children = [
+                {
+                  path: app.path,
+                  loadChildren: () =>
+                    loadRemoteModule(app).then((m) => m[app.moduleName]),
+                },
+              ];
+            } else {
+              homePath.children = [
+                {
+                  path: app.path,
+                  component: ReactWrapperComponent,
+                  data: { appInfo: app },
+                },
+              ];
+            }
           }
         }
         routes.push(homePath);

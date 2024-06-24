@@ -1,7 +1,11 @@
 import { APP_INITIALIZER, ApplicationConfig, isDevMode } from '@angular/core';
 import { HttpClient, provideHttpClient, withFetch } from '@angular/common/http';
 import { Observable, tap } from 'rxjs';
-import { provideRouter, withHashLocation } from '@angular/router';
+import {
+  provideRouter,
+  withComponentInputBinding,
+  withHashLocation,
+} from '@angular/router';
 
 import { provideAnimations } from '@angular/platform-browser/animations';
 import { provideServiceWorker } from '@angular/service-worker';
@@ -15,11 +19,9 @@ function initializeAppFactory(
   rmi: RemoteModuleInfoService,
 ): () => Observable<any> {
   return () =>
-    httpClient.get<any[]>(environment.MODULE_FEDERATION_URL).pipe(
-      tap((v) => {
-        rmi.remoteModuleInfo = v;
-      }),
-    );
+    httpClient
+      .get<any[]>(environment.MODULE_FEDERATION_URL)
+      .pipe(tap((v) => (rmi.remoteModuleInfo = v)));
 }
 
 export const appConfig: ApplicationConfig = {
@@ -31,7 +33,7 @@ export const appConfig: ApplicationConfig = {
       deps: [HttpClient, RemoteModuleInfoService],
       multi: true,
     },
-    provideRouter(routes, withHashLocation()),
+    provideRouter(routes, withHashLocation(), withComponentInputBinding()),
     provideAnimations(),
     provideServiceWorker('ngsw-worker.js', {
       enabled: !isDevMode(),

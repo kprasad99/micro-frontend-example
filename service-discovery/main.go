@@ -14,10 +14,11 @@ import (
 type ServiceInfo struct {
 	Name          string `json:"name"`
 	Path          string `json:"path"`
-	ModuleName    string `json:"moduleName"`
+	ModuleName    string `json:"moduleName,omitempty"`
 	RemoteEntry   string `json:"remoteEntry"`
 	RemoteName    string `json:"remoteName"`
 	ExposedModule string `json:"exposedModule"`
+	AppType       string `json:"appType"`
 }
 
 func okHandler(ctx *fiber.Ctx) error {
@@ -109,6 +110,9 @@ func main() {
 				}
 				if k == "io.github.kprasad99.frontend.exposedModule" {
 					svc.ExposedModule = v
+				}
+				if k == "io.github.kprasad99.frontend.appType" {
+					svc.AppType = v
 				}
 			}
 			if key != "" && (ignoreGroup || hasGroup) {

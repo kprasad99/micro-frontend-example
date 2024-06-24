@@ -9,9 +9,10 @@ import { NgModule } from '@angular/core';
 
 import { HomeComponent } from './home.component';
 import { HomeRoutingModule } from './home-routing.module';
+import { ReactWrapperComponent } from '../react-wrapper/react-wrapper.component';
 
 @NgModule({
-  declarations: [HomeComponent],
+  declarations: [HomeComponent, ReactWrapperComponent],
   imports: [
     CommonModule,
     MatButtonModule,

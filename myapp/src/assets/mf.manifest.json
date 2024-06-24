@@ -3,16 +3,27 @@
     "name": "app1",
     "path": "app1",
     "moduleName": "App1Module",
-    "remoteEntry": "http://localhost:4201/app1/remoteEntry.js",
+    "remoteEntry": "/app1/remoteEntry.js",
     "remoteName": "app1",
-    "exposedModule": "/app1/App1Module"
+    "exposedModule": "/app1/App1Module",
+    "appType": "angular"
   },
   "app2": {
     "name": "app2",
     "path": "app2",
     "moduleName": "App2Module",
-    "remoteEntry": "http://localhost:4202/app2/remoteEntry.js",
+    "remoteEntry": "/app2/remoteEntry.js",
     "remoteName": "app2",
-    "exposedModule": "/app2/App2Module"
+    "exposedModule": "/app2/App2Module",
+    "appType": "angular"
+  },
+  "app3": {
+    "name": "app3",
+    "path": "app3",
+    "moduleName": "",
+    "remoteEntry": "/app3/remoteEntry.js",
+    "remoteName": "app3",
+    "exposedModule": "/app3/App3",
+    "appType": "react"
   }
 }
