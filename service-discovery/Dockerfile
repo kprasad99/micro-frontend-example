@@ -1,4 +1,4 @@
-FROM        golang:1.22-alpine3.19 AS builder
+FROM        golang:1.22-alpine3.20 AS builder
 WORKDIR     /usr/src/service-discovery
 COPY        go.mod /usr/src/service-discovery/go.mod
 COPY        go.sum /usr/src/service-discovery/go.sum

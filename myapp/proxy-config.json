@@ -1,0 +1,14 @@
+{
+  "/app1": {
+    "target": "http://localhost:4201/",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  },
+  "/app3": {
+    "target": "http://localhost:4204/",
+    "changeOrigin": true,
+    "secure": false,
+    "logLevel": "debug"
+  }
+}

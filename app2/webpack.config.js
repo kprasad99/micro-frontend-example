@@ -4,7 +4,7 @@ module.exports = withModuleFederationPlugin({
   name: 'app2',
 
   exposes: {
-    './App2Module': './src/app/app2/app2.module.ts'
+    '/app2/App2Module': './src/app/app2/app2.module.ts'
   },
 
   // shared: {
@@ -18,3 +18,6 @@ module.exports = withModuleFederationPlugin({
     '@angular/material': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: true },
   })
 });
+
+module.exports.output.scriptType = 'text/javascript';
+module.exports.output.publicPath = '/app2/';

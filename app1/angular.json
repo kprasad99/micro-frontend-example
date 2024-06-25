@@ -36,7 +36,8 @@
 						"scripts": [],
 						"main": "src/main.ts",
 						"extraWebpackConfig": "webpack.config.js",
-						"commonChunk": false
+						"commonChunk": false,
+            "baseHref": "/app1/"
 					},
 					"configurations": {
 						"production": {

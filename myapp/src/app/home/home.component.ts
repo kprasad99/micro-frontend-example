@@ -16,8 +16,9 @@ export class HomeComponent implements OnInit {
   ngOnInit(): void {
     this.menu = [];
     this.http.get<any>(environment.MODULE_FEDERATION_URL).subscribe((v) => {
-      for (const obj in v) {
-        this.menu = [...this.menu, obj];
+      for (const key in v) {
+        const app = v[key];
+        this.menu = [...this.menu, app.name];
       }
     });
   }

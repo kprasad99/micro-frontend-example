@@ -76,10 +76,12 @@
 					"configurations": {
 						"production": {
 							"buildTarget": "myapp:build:production",
-							"extraWebpackConfig": "webpack.prod.config.js"
+							"extraWebpackConfig": "webpack.prod.config.js",
+              "proxyConfig": "proxy-config.json"
 						},
 						"development": {
-							"buildTarget": "myapp:build:development"
+							"buildTarget": "myapp:build:development",
+              "proxyConfig": "proxy-config.json"
 						}
 					},
 					"defaultConfiguration": "development",

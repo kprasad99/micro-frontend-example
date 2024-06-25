@@ -2,9 +2,8 @@ const { shareAll, share, withModuleFederationPlugin } = require('@angular-archit
 
 module.exports = withModuleFederationPlugin({
   name: 'app1',
-
   exposes: {
-    './App1Module': './src/app/app1/app1.module.ts'
+    '/app1/App1Module': './src/app/app1/app1.module.ts'
   },
 
   // shared: {
@@ -18,3 +17,6 @@ module.exports = withModuleFederationPlugin({
     '@angular/material': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: true },
   })
 });
+
+module.exports.output.scriptType = 'text/javascript';
+module.exports.output.publicPath = '/app1/';

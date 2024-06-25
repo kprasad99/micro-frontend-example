@@ -13,3 +13,5 @@ module.exports = withModuleFederationPlugin({
     '@angular/material': { singleton: true, strictVersion: true, requiredVersion: 'auto', includeSecondaries: true },
   })
 });
+
+module.exports.output.scriptType = 'text/javascript';
